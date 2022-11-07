@@ -5,7 +5,6 @@ Entity Movie {
   name varchar(100) <<NN>>
   image_url varchar(255)
   year int(4)
-  rating float(8)
 }
 
 Entity Review {
