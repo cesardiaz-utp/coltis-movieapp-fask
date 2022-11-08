@@ -3,16 +3,18 @@ from model.db import execute, commit
 
 
 class MovieRepository:
-    def insert(movie: Movie) -> None:
-        sql = f"""
+    def insert(self, movie: Movie) -> None:
+        sql = """
                 INSERT INTO Movie (code, name, image_url, year)
-                VALUES ('{movie.code}', '{movie.name}', '{movie.image_url}', {movie.year});
-               """
+                VALUES ('{}', '{}', {}, {});
+               """.format(movie.code, movie.name,
+                    "\'"+movie.image_url+"\'" if movie.image_url != None else 'NULL',
+                    movie.year if movie.year != None else 'NULL' )
         cursor = execute(sql)
         cursor.close()
         commit()
 
-    def findByCode(code: str) -> Movie:
+    def findByCode(self, code: str) -> Movie:
         sql = f"""
                 SELECT code, name, image_url, year
                 FROM Movie
@@ -22,13 +24,16 @@ class MovieRepository:
         result = cursor.fetchone() # ('a1','Matrix','htt...',2000)
         cursor.close()
 
+        if result is None:
+            raise Exception(f"No existe una pelicula con codigo '{code}'")
+
         return Movie(
             code=result[0],
             name=result[1],
             image_url=result[2],
             year=result[3])
 
-    def findAll() -> list:
+    def findAll(self) -> list:
         sql = """
                 SELECT code, name, image_url, year
                 FROM Movie
@@ -50,7 +55,7 @@ class MovieRepository:
 
 
 class ReviewRepository:
-    def insert(review: Review) -> None:
+    def insert(self, review: Review) -> None:
         sql = f"""
                 INSERT INTO Review (name, email, description, rating, code)
                 VALUES ('{review.name}', '{review.email}', '{review.description}', {review.rating}, '{review.code}');
@@ -59,7 +64,7 @@ class ReviewRepository:
         cursor.close()
         commit()
 
-    def findById(id: int) -> Review:
+    def findById(self, id: int) -> Review:
         sql = f"""
                 SELECT id, name, email, description, rating, code
                 FROM Review
@@ -77,7 +82,7 @@ class ReviewRepository:
             rating=result[4],
             movie_code=result[5])
 
-    def findByMovieCode(movie_code: str) -> list:
+    def findByMovieCode(self, movie_code: str) -> list:
         sql = f"""
                SELECT id, name, email, description, rating, code
                 FROM Review
@@ -99,7 +104,7 @@ class ReviewRepository:
         
         return response
 
-    def update(review: Review) -> None:
+    def update(self, review: Review) -> None:
         sql = f"""
                 UPDATE Review
                 SET name = '{review.name}',
@@ -113,7 +118,7 @@ class ReviewRepository:
         cursor.close()
         commit()
 
-    def delete(id: int) -> None:
+    def delete(self, id: int) -> None:
         sql = f"""
                 DELETE
                 FROM Review
