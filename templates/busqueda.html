@@ -1,0 +1,34 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+<div class="w-100">
+    <form class="d-flex" action="/busqueda">
+        <input type="text" class="form-control me-2" placeholder="Busqueda">
+        <button type="submit" class="btn btn-outline-success">Buscar</button>
+    </form>
+</div>
+<div>
+    <div class="album py-5">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <!-- Cada uno de los resultados -->
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="https://i0.wp.com/imgs.hipertextual.com/wp-content/uploads/2020/01/hipertextual-arte-conceptual-avatar-2-muestra-nuevos-rincones-pandora-2020623395.jpg?fit=1200%2C759&quality=60&strip=all&ssl=1" class="card-img-top" alt="Logo Peliculas">
+
+                    <div class="card-body text-black-50">
+                        <p class="card-title">Titulo</p>
+                        <p class="card-subtitle">Calificación</p>
+                        <p class="card-text">Descripción</p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Ver</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
