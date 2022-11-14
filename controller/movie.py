@@ -37,18 +37,29 @@ def create():
     api = None
     status = 201
     try:
-        code = request.json["code"]
-        name = request.json["name"]
-        image = request.json["image_url"]
-        year = request.json["year"]
+        data = request.get_json(force=True)
 
-        movie = Movie(code, name, image_url=image, year= year)
-        repository.insert(movie)
-
-        api = ApiResponse()
+        if data.get("code") is None:
+            api = ApiResponse(message="El código de la pelicula es obligatorio")
+            status = 400
+        elif data.get("name") is None:
+            api = ApiResponse(message="El nombre de la pelicula es obligatorio")
+            status = 400
+        else:
+            if not(isinstance(data.get("code"),str)):
+                api = ApiResponse(message="El codigo debe ser una cadena")
+                status = 400
+            else:
+                movie = Movie(
+                    data.get("code"), 
+                    data.get("name"),
+                    data.get("image_url"),
+                    data.get("year"))
+                repository.insert(movie)
+                api = ApiResponse(True)
     except IntegrityError as ex :
         status = 400
-        if ex.code == 1062:
+        if ex.args[0] == 1062:
             api = ApiResponse(message="Ya existe una pelicula con este codigo")
         else:
             api = ApiResponse(message=str(ex))

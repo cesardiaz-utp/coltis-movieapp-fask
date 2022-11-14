@@ -4,9 +4,14 @@ from model.db import execute, commit
 
 class MovieRepository:
     def insert(self, movie: Movie) -> None:
+        if movie.image_url == None:
+            image = "NULL"
+        else:
+            image = f"'{movie.image_url}'"
+
         sql = f"""
                 INSERT INTO Movie (code, name, image_url, year)
-                VALUES ('{movie.code}', '{movie.name}', '{movie.image_url}', {movie.year});
+                VALUES ('{movie.code}', '{movie.name}', {image}, {movie.year if movie.year != None else 'NULL' });
                """
         cursor = execute(sql)
         cursor.close()
