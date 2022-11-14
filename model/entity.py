@@ -22,3 +22,13 @@ class Review:
         self.description = description
         self.rating = rating
         self.code = movie_code
+    
+    def toDic(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "description": self.description,
+            "rating": self.rating,
+            "code": self.code
+        }
