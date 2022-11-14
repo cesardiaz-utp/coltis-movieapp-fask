@@ -36,15 +36,19 @@ def createReview():
     try:
         data = request.get_json(force=True)
         # TODO: Validar datos
-        review = Review(
-            name=data.get("name"),
-            email=data.get("email"),
-            description=data.get("description"),
-            rating=data.get("rating"),
-            movie_code=data.get("code")
-        )
-        repository.insert(review)
-        api = ApiResponse(data=True)
+        if data.get("name") == None:
+            api = ApiResponse(message="El nombre es un campo obligatorio")
+            status = 409
+        else:
+            review = Review(
+                name=data.get("name"),
+                email=data.get("email"),
+                description=data.get("description"),
+                rating=data.get("rating"),
+                movie_code=data.get("code")
+            )
+            repository.insert(review)
+            api = ApiResponse(data=True)
     except Exception as ex:
         api = ApiResponse(message=str(ex))
         status = 409
